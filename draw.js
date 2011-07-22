@@ -17,3 +17,17 @@ function draw_stands(c){
 		c.restore();
 	}
 }
+
+function draw_cursor(c){
+	c.save();
+	c.strokeStyle = "#F00";
+	c.translate(mouseX, mouseY);
+	c.beginPath();
+	c.moveTo(-20, 0);
+	c.lineTo(20, 0);
+	c.moveTo(0, -20);
+	c.lineTo(0, 20);
+	c.stroke();
+	//c.closePath();
+	c.restore();
+}

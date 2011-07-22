@@ -2,13 +2,14 @@ var conf = {};
 var avatar;
 var STAND_COUNT = 10;
 var AVATAR_SPEED = 5;
+var CANVAS_BORDER_WIDTH = 5;
 var stands = new Array();
 var currentStrategy;
-var moveLeftFlag = false;
-var moveRightFlag = false;
-var moveUpFlag = false;
-var moveDownFlag = false;
 var pendingStrategy;
+var pendingMouseX;
+var pendingMouseY;
+var mouseX;
+var mouseY;
 $(init);
 
 function load_conf(){
@@ -21,12 +22,23 @@ function load_strategy(){
 	pendingStrategy = null;
 }
 
+function init_pending_mouse_position(){
+	pendingMouseX = conf.width / 2;
+	pendingMouseY = conf.height / 2;
+}
+
 function init(){
 	load_conf();
 	load_entities();
 	load_strategy();
+	init_pending_mouse_position();
 	$("#drawing_board").attr("width", conf.width);
 	$("#drawing_board").attr("height", conf.height);
+	$("#drawing_board").mousemove(function(e){
+		//console.log(e.offsetX + "," + e.offsetY);
+		pendingMouseX = e.offsetX - CANVAS_BORDER_WIDTH;
+		pendingMouseY = e.offsetY - CANVAS_BORDER_WIDTH;
+	});
 	$("body").keypress(on_key_press);
 	tick();
 }
@@ -34,14 +46,8 @@ function init(){
 function on_key_press(event){
 	var charCode = event.which;
 	console.log("press: " + charCode);
-	if(charCode == 97){
-		moveLeftFlag = true;
-	}else if(charCode == 100){
-		moveRightFlag = true;
-	}else if(charCode == 119){
-		moveUpFlag = true;
-	}else if(charCode == 115){
-		moveDownFlag = true;
+	if(charCode == 97){//a
+		currentStrategy = new StrategyAssemble();
 	}
 }
 
@@ -55,11 +61,12 @@ function load_entities(){
 function tick(){
 	update();
 	draw();
-	window.setTimeout("tick()", 100);
+	window.setTimeout("tick()", 50);
 }
 
 function update(){
-	update_avatar_position();
+	update_mouse_position();
+	update_strategy();
 }
 
 function draw(){
@@ -67,6 +74,7 @@ function draw(){
 	clear(c);
 	draw_avatar(c);
 	draw_stands(c);
+	//draw_cursor(c);
 }
 
 function clear(c){
