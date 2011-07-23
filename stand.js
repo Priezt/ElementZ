@@ -7,6 +7,7 @@ function Stand(){
 	this.speed = 10;
 	this.draw = _stand_draw;
 	this.move = _stand_move;
+	this.forward = _stand_forward;
 }
 Avatar.prototype = new Entity();
 
@@ -36,3 +37,15 @@ function _stand_move(x, y){
 	this.x += this.speed * Math.sin(ang);
 	this.y -= this.speed * Math.cos(ang);
 }
+
+function _stand_forward(){
+	if(this.x == mouseX && this.y == mouseY){
+		this.direction = Math.random() * 360;
+	}else{
+		this.direction = get_direction(this.y - mouseY, this.x - mouseX);
+	}
+	var ang = this.direction * Math.PI / 180;
+	this.x += this.speed * Math.sin(ang);
+	this.y -= this.speed * Math.cos(ang);
+}
+

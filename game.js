@@ -1,6 +1,6 @@
 var conf = {};
 var avatar;
-var STAND_COUNT = 10;
+var STAND_COUNT = 12;
 var AVATAR_SPEED = 5;
 var CANVAS_BORDER_WIDTH = 5;
 var stands = new Array();
@@ -18,7 +18,7 @@ function load_conf(){
 }
 
 function load_strategy(){
-	currentStrategy = new StrategyNop();
+	currentStrategy = new StrategyStop();
 	pendingStrategy = null;
 }
 
@@ -48,6 +48,14 @@ function on_key_press(event){
 	console.log("press: " + charCode);
 	if(charCode == 97){//a
 		currentStrategy = new StrategyAssemble();
+	}else if(charCode == 100){//d
+		currentStrategy = new StrategyDisperse();
+	}else if(charCode == 115){//s
+		currentStrategy = new StrategyStop();
+	}else if(charCode == 99){//c
+		currentStrategy = new StrategyCircle();
+	}else if(charCode == 101){//e
+		currentStrategy = new StrategyLine();
 	}
 }
 
